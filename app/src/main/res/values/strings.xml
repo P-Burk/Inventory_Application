@@ -6,4 +6,5 @@
     <string name="loginButtonTxt">Login</string>
     <string name="registerButtonTxt">Register</string>
     <string name="inventoryBarText">Inventory</string>
+    <string name="actionSearch">Search for Item</string>
 </resources>
