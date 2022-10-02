@@ -3,4 +3,6 @@
     <string name="loginRequestMsg">Please login or create an account.</string>
     <string name="userNameHint">Username</string>
     <string name="passwordNameHint">Password</string>
+    <string name="loginButtonTxt">Login</string>
+    <string name="registerButtonTxt">Register</string>
 </resources>
