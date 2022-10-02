@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="loginRequestMsg">Please login or create an account.</string>
+    <string name="userNameHint">Username</string>
+    <string name="passwordNameHint">Password</string>
+</resources>
