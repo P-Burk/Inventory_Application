@@ -7,26 +7,41 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/editTextTextPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="89dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="89dp"
+        android:id="@+id/editTextTextUserName"
+        android:hint="@string/userNameHint"
+        android:layout_width="244dp"
+        android:layout_height="75dp"
         android:ems="10"
-        android:inputType="textPassword"
-        android:autofillHints="password"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.61" />
+        app:layout_constraintVertical_bias="0.45"
+        android:autofillHints="username"
+        android:inputType="textNoSuggestions" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword"
+        android:hint="@string/passwordNameHint"
+        android:layout_width="244dp"
+        android:layout_height="75dp"
+        android:autofillHints="password"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextTextUserName"
+        app:layout_constraintVertical_bias="0.120000005" />
+
+
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="@string/loginRequestMsg"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
