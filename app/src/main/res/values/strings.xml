@@ -7,4 +7,23 @@
     <string name="registerButtonTxt">Register</string>
     <string name="inventoryBarText">Inventory</string>
     <string name="actionSearch">Search for Item</string>
+    <string name="itemNameHeader">Item Name</string>
+
+    <string-array name="placeHolderItems">
+        <item>Pork</item>
+        <item>Chicken</item>
+        <item>Eggs</item>
+        <item>Pepper</item>
+        <item>Salt</item>
+        <item>Hot Sauce</item>
+    </string-array>
+
+    <string-array name="placeHolderItemCounts">
+        <item>2</item>
+        <item>5</item>
+        <item>24</item>
+        <item>1</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>
