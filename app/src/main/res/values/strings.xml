@@ -5,4 +5,5 @@
     <string name="passwordNameHint">Password</string>
     <string name="loginButtonTxt">Login</string>
     <string name="registerButtonTxt">Register</string>
+    <string name="inventoryBarText">Inventory</string>
 </resources>
