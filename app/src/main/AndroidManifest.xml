@@ -13,9 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@menu/inventory_menu" />
         <activity
             android:name=".inventory"
-            android:exported="true" >
+            android:exported="true"
+            android:label="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,8 +29,6 @@
         <activity
             android:name=".login"
             android:exported="true" />
-
-
     </application>
 
 </manifest>
