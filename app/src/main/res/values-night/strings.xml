@@ -7,6 +7,9 @@
     <string name="inventoryBarText">Inventory</string>
     <string name="actionSearch">Search for Item</string>
     <string name="itemNameHeader">Item Name</string>
+    <string name="subtractButton">Subtract from Count</string>
+    <string name="additionButton">Add to Count</string>
+    <string name="deleteButton">Delete from List</string>
 
     <string-array name="placeHolderItems">
         <item>Pork</item>
