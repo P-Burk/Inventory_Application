@@ -11,6 +11,7 @@
     <string name="additionButton">Add to Count</string>
     <string name="deleteButton">Delete from List</string>
     <string name="FAB">Add Item</string>
+    <string name="actionSettings">Go to Settings</string>
 
     <string-array name="placeHolderItems">
         <item>Pork</item>
