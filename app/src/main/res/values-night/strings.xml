@@ -21,14 +21,32 @@
         <item>Pepper</item>
         <item>Salt</item>
         <item>Hot Sauce</item>
+        <item>item7</item>
+        <item>item8</item>
+        <item>item9</item>
+        <item>item10</item>
+        <item>item11</item>
+        <item>item12</item>
+        <item>item13</item>
+        <item>item14</item>
+        <item>item15</item>
     </string-array>
 
-    <string-array name="placeHolderItemCounts">
+    <integer-array name="placeHolderItemCounts">
         <item>2</item>
         <item>5</item>
         <item>24</item>
         <item>1</item>
         <item>1</item>
         <item>2</item>
-    </string-array>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </integer-array>
 </resources>
