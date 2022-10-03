@@ -2,6 +2,8 @@ package com.pburkhardt.inventory_application;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +13,12 @@ import android.view.View;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+
 public class inventory extends AppCompatActivity {
+
+    ArrayList<inventoryItemModel> inventoryItemsList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +26,22 @@ public class inventory extends AppCompatActivity {
         setContentView(R.layout.activity_inventory);
         Toolbar inventoryToolBar = (Toolbar) findViewById(R.id.inventoryToolBar);
         setSupportActionBar(inventoryToolBar);
+
+        RecyclerView recyclerView = findViewById(R.id.inventoryList);
+        populateInventoryList();
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, inventoryItemsList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    // populates the array list for that holds all of the inventory items
+    private void populateInventoryList() {
+        String[] inventoryItemNames = getResources().getStringArray(R.array.placeHolderItems);
+        String[] inventoryItemCounts = getResources().getStringArray(R.array.placeHolderItemCounts);
+
+        for (int i = 0; i < inventoryItemNames.length; i++) {
+            inventoryItemsList.add(new inventoryItemModel(inventoryItemNames[i], inventoryItemCounts[i]));
+        }
     }
 
     @Override
