@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,9 @@ public class inventory extends AppCompatActivity {
                 //TODO: call search function here
                 placeHolderAction(findViewById(R.id.inventoryToolBar));
                 return true;
+            case R.id.action_settings:
+                goToSettings(findViewById(R.id.action_settings));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -61,6 +65,11 @@ public class inventory extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.inventory_menu, menu);
         return true;
+    }
+
+    public void goToSettings(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     //place holder action

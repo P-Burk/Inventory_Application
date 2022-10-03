@@ -13,6 +13,7 @@
     <string name="deleteButton">Delete from List</string>
     <string name="FAB">Add Item</string>
     <string name="actionSettings">Go to Settings</string>
+    <string name="settingsText">Settings</string>
 
     <string-array name="placeHolderItems">
         <item>Pork</item>
