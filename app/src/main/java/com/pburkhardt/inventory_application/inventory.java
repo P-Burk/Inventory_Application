@@ -38,7 +38,7 @@ public class inventory extends AppCompatActivity {
     // populates the array list for that holds all of the inventory items
     private void populateInventoryList() {
         String[] inventoryItemNames = getResources().getStringArray(R.array.placeHolderItems);
-        String[] inventoryItemCounts = getResources().getStringArray(R.array.placeHolderItemCounts);
+        int[] inventoryItemCounts = getResources().getIntArray(R.array.placeHolderItemCounts);
 
         for (int i = 0; i < inventoryItemNames.length; i++) {
             inventoryItemsList.add(new inventoryItemModel(inventoryItemNames[i], inventoryItemCounts[i]));
@@ -78,5 +78,11 @@ public class inventory extends AppCompatActivity {
                 "PLACE HOLDER ACTION",
                 BaseTransientBottomBar.LENGTH_SHORT);
         someActionSnack.show();
+    }
+
+    //TODO: change inventory.class to w/e the class is for the add item screen
+    public void goToAddActivity() {
+        Intent intent = new Intent(this, inventory.class);
+        startActivity(intent);
     }
 }

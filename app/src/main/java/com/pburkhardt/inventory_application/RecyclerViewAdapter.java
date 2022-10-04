@@ -35,12 +35,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     // binds data to the views/cards
-    public void onBindViewHolder(@NonNull RecyclerViewAdapter.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         holder.itemName.setText(itemInventoryList.get(position).getItemName());
-        holder.itemCount.setText(itemInventoryList.get(position).getItemCount());
-//        holder.subButton.setImageResource(R.layout.inventory_row());
-//        holder.addButton.setImageResource(itemInventoryList.get(position).getAddBtnImg());
-//        holder.trashButton.setImageResource(itemInventoryList.get(position).getTrashBtnImg());
+        holder.itemCount.setText(String.valueOf(itemInventoryList.get(position).getItemCount()));
     }
 
     @Override
