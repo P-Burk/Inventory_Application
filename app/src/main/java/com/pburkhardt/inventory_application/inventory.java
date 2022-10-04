@@ -80,9 +80,8 @@ public class inventory extends AppCompatActivity {
         someActionSnack.show();
     }
 
-    //TODO: change inventory.class to w/e the class is for the add item screen
-    public void goToAddActivity() {
-        Intent intent = new Intent(this, inventory.class);
+    public void goToAddActivity(View view) {
+        Intent intent = new Intent(this, AddItemActivity.class);
         startActivity(intent);
     }
 }

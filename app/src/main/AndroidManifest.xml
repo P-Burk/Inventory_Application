@@ -16,9 +16,13 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".AddItemActivity"
+            android:exported="false"
+            android:parentActivityName=".inventory" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false"
-            android:parentActivityName=".inventory"/>
+            android:parentActivityName=".inventory" />
 
         <meta-data
             android:name="com.google.android.actions"
@@ -28,11 +32,9 @@
             android:name=".inventory"
             android:exported="true"
             android:label="" />
-
-
         <activity
             android:name=".login"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

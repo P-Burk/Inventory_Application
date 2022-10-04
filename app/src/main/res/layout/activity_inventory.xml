@@ -83,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:clickable="true"
+            android:onClick="goToAddActivity"
             android:contentDescription="@string/FAB"
             android:outlineAmbientShadowColor="#00FFFFFF"
             android:outlineSpotShadowColor="#00FFFFFF"
