@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.pburkhardt.inventory_application">
 
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,10 +13,27 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Inventory_Application"
+        android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name="com.pburkhardt.inventory_application.MainActivity"
+            android:name=".AddItemActivity"
+            android:exported="false"
+            android:parentActivityName=".inventory" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".inventory" />
+
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@menu/inventory_menu" />
+
+        <activity
+            android:name=".inventory"
+            android:exported="true"
+            android:label="" />
+        <activity
+            android:name=".login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

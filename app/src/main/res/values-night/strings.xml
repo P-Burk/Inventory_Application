@@ -1,10 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Inventory_Application</string>
     <string name="loginRequestMsg">Please login or create an account.</string>
     <string name="userNameHint">Username</string>
     <string name="passwordNameHint">Password</string>
     <string name="loginButtonTxt">Login</string>
-    <string name="registerButtonTxt">Register</string>
     <string name="inventoryBarText">Inventory</string>
     <string name="actionSearch">Search for Item</string>
     <string name="itemNameHeader">Item Name</string>
