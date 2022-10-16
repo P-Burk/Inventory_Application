@@ -53,6 +53,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return insert != -1;  //true
     }
 
+    //Add item to ITEM_TABLE
+    public boolean addItem(inventoryItemModel newItem) {
+        SQLiteDatabase invAppDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COLUMN_ITEM_NAME, newItem.getItemName());
+        contentValues.put(COLUMN_ITEM_COUNT, newItem.getItemCount());
+
+        long insert = invAppDB.insert(INVENTORY_TABLE, null, contentValues);
+        return insert != -1;  //true
+    }
+
     //search the db for username/password combo and return true if found
     public boolean checkDBforUser(InventoryUser newUser, boolean userANDpassword) {
         SQLiteDatabase invAppDB = this.getReadableDatabase();
@@ -62,6 +74,24 @@ public class DBHelper extends SQLiteOpenHelper {
             DBquery = String.format("SELECT * FROM %s WHERE %s='%s'", USER_TABLE,
                     COLUMN_USER_NAME, newUser.getInvUserName());
         }
+
+        Cursor cursor = invAppDB.rawQuery(DBquery, null);
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            invAppDB.close();
+            return true;
+        } else {
+            cursor.close();
+            invAppDB.close();
+            return false;
+        }
+    }
+
+    //search the INVENTORY_TABLE for an item (to avoid adding duplicates)
+    public boolean checkDBforItem(inventoryItemModel newItem) {
+        SQLiteDatabase invAppDB = this.getReadableDatabase();
+        String DBquery = String.format("SELECT * FROM %s WHERE %s='%s'", INVENTORY_TABLE,
+                COLUMN_ITEM_NAME, newItem.getItemName());
 
         Cursor cursor = invAppDB.rawQuery(DBquery, null);
         if (cursor.moveToFirst()) {
