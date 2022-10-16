@@ -8,12 +8,20 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String COLUMN_ID = "ID";
     public static final String USER_TABLE = "USER_TABLE";
+    public static final String COLUMN_USER_ID = "ID";
     public static final String COLUMN_USER_NAME = "USER_NAME";
     public static final String COLUMN_USER_PASSWORD = "USER_PASSWORD";
+    public static final String INVENTORY_TABLE = "INVENTORY_TABLE";
+    public static final String COLUMN_ITEM_ID = "ID";
+    public static final String COLUMN_ITEM_NAME = "ITEM_NAME";
+    public static final String COLUMN_ITEM_COUNT = "ITEM_COUNT";
+
 
     //CONSTRUCTOR
     public DBHelper(@Nullable Context context) {
@@ -22,9 +30,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createUserTableString = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " + COLUMN_USER_PASSWORD + " TEXT)";
-
+        String createUserTableString = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " + COLUMN_USER_PASSWORD + " TEXT)";
+        String createInvTableString = "CREATE TABLE " + INVENTORY_TABLE + " (" + COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ITEM_NAME + " TEXT, " + COLUMN_ITEM_COUNT + " INTEGER)";
         sqLiteDatabase.execSQL(createUserTableString);
+        sqLiteDatabase.execSQL(createInvTableString);
     }
 
     @Override
@@ -41,6 +50,18 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_USER_PASSWORD, newUser.getInvUserPassword());
 
         long insert = invAppDB.insert(USER_TABLE, null, contentValues);
+        return insert != -1;  //true
+    }
+
+    //Add item to ITEM_TABLE
+    public boolean addItem(inventoryItemModel newItem) {
+        SQLiteDatabase invAppDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COLUMN_ITEM_NAME, newItem.getItemName());
+        contentValues.put(COLUMN_ITEM_COUNT, newItem.getItemCount());
+
+        long insert = invAppDB.insert(INVENTORY_TABLE, null, contentValues);
         return insert != -1;  //true
     }
 
@@ -64,5 +85,41 @@ public class DBHelper extends SQLiteOpenHelper {
             invAppDB.close();
             return false;
         }
+    }
+
+    //search the INVENTORY_TABLE for an item (to avoid adding duplicates)
+    public boolean checkDBforItem(inventoryItemModel newItem) {
+        SQLiteDatabase invAppDB = this.getReadableDatabase();
+        String DBquery = String.format("SELECT * FROM %s WHERE %s='%s'", INVENTORY_TABLE,
+                COLUMN_ITEM_NAME, newItem.getItemName());
+
+        Cursor cursor = invAppDB.rawQuery(DBquery, null);
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            invAppDB.close();
+            return true;
+        } else {
+            cursor.close();
+            invAppDB.close();
+            return false;
+        }
+    }
+
+    public List<inventoryItemModel> getAllItemsInInventory() {
+        String DBquery = "SELECT * FROM " + INVENTORY_TABLE;
+        SQLiteDatabase invAppDB = this.getReadableDatabase();
+        List<inventoryItemModel> inventoryList = new ArrayList<>();
+
+        Cursor cursor = invAppDB.rawQuery(DBquery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                inventoryItemModel newItem = new inventoryItemModel(cursor.getString(1), cursor.getInt(2));
+                inventoryList.add(newItem);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        invAppDB.close();
+        return inventoryList;
     }
 }
