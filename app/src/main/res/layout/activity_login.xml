@@ -60,7 +60,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="200dp"
-        android:onClick="goToInventory"
         android:text="@string/loginButtonTxt"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
