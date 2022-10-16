@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String USER_TABLE = "USER_TABLE";
@@ -70,5 +73,23 @@ public class DBHelper extends SQLiteOpenHelper {
             invAppDB.close();
             return false;
         }
+    }
+
+    public List<inventoryItemModel> getAllItemsInInventory() {
+        String DBquery = "SELECT * FROM " + INVENTORY_TABLE;
+        SQLiteDatabase invAppDB = this.getReadableDatabase();
+        List<inventoryItemModel> inventoryList = new ArrayList<>();
+
+        Cursor cursor = invAppDB.rawQuery(DBquery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                inventoryItemModel newItem = new inventoryItemModel(cursor.getString(1), cursor.getInt(2));
+                inventoryList.add(newItem);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        invAppDB.close();
+        return inventoryList;
     }
 }
