@@ -2,16 +2,11 @@ package com.pburkhardt.inventory_application;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class login extends AppCompatActivity {
@@ -45,12 +40,19 @@ public class login extends AppCompatActivity {
                     Toast.makeText(login.this, "Username and/or password fields blank.",
                             Toast.LENGTH_SHORT).show();
                 } else {
+                    //create user object
                     newUser = new InventoryUser(-1, userNameText.getText().toString(),
                             userPasswordText.getText().toString());
-                    //TODO: add function to check DB
-                    //TODO: add function to go to inventory activity if user and password in DB
 
-
+                    //check to see if user is in the DB
+                    if (DBHelper.checkDBforUser(newUser, true)) {     //user found -> login
+                        Toast.makeText(login.this, "Login Successful.",
+                                Toast.LENGTH_SHORT).show();
+                        goToInventory(view);
+                    } else {                                    //user not found -> error
+                        Toast.makeText(login.this, "Login Failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -69,12 +71,17 @@ public class login extends AppCompatActivity {
                 } else {
                     newUser = new InventoryUser(-1, userNameText.getText().toString(),
                             userPasswordText.getText().toString());
-                    //TODO: add function to check DB if user already exists
-                    boolean addSuccess = DBHelper.addUser(newUser);
-                    if (addSuccess) {
-                        Toast.makeText(login.this, "User added.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(login.this, "Failed to add user.", Toast.LENGTH_SHORT).show();
+
+                    //check to see if username is already in DB
+                    if (DBHelper.checkDBforUser(newUser, false)) {
+                        Toast.makeText(login.this, "User already in database.", Toast.LENGTH_SHORT).show();
+                    } else {    //username not in DB -> add new user
+                        boolean addSuccess = DBHelper.addUser(newUser);
+                        if (addSuccess) {
+                            Toast.makeText(login.this, "User added.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(login.this, "Failed to add user.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
