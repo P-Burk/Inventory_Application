@@ -19,7 +19,6 @@ public class InventoryUser {
     }
 
     //DEBUG HELPER FUNCTION
-
     @NonNull
     @Override
     public String toString() {
