@@ -15,10 +15,12 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class inventory extends AppCompatActivity {
 
-    ArrayList<inventoryItemModel> inventoryItemsList = new ArrayList<>();
+    List<inventoryItemModel> inventoryItemsList = new ArrayList<>();
+    DBHelper DBHelper;
 
 
     @Override
@@ -27,22 +29,11 @@ public class inventory extends AppCompatActivity {
         setContentView(R.layout.activity_inventory);
         Toolbar inventoryToolBar = (Toolbar) findViewById(R.id.inventoryToolBar);
         setSupportActionBar(inventoryToolBar);
-
+        DBHelper = new DBHelper(inventory.this);
         RecyclerView recyclerView = findViewById(R.id.inventoryList);
-        populateInventoryList();
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, inventoryItemsList);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, DBHelper.getAllItemsInInventory());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    // populates the array list for that holds all of the inventory items
-    private void populateInventoryList() {
-        String[] inventoryItemNames = getResources().getStringArray(R.array.placeHolderItems);
-        int[] inventoryItemCounts = getResources().getIntArray(R.array.placeHolderItemCounts);
-
-        for (int i = 0; i < inventoryItemNames.length; i++) {
-            inventoryItemsList.add(new inventoryItemModel(inventoryItemNames[i], inventoryItemCounts[i]));
-        }
     }
 
     @Override

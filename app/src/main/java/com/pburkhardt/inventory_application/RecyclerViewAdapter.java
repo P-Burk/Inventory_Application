@@ -1,7 +1,6 @@
 package com.pburkhardt.inventory_application;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.viewHolder> {
     Context context;    //used for inflater
-    ArrayList<inventoryItemModel> itemInventoryList;
+    List<inventoryItemModel> itemInventoryList;
 
     ///// CONSTRUCTOR /////
-    public RecyclerViewAdapter(Context context, ArrayList<inventoryItemModel> invItemList) {
+    public RecyclerViewAdapter(Context context, List<inventoryItemModel> invItemList) {
         this.context = context;
-        this. itemInventoryList = invItemList;
+        this.itemInventoryList = invItemList;
     }
 
     @NonNull
