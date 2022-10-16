@@ -21,6 +21,7 @@ public class login extends AppCompatActivity {
     Button registerButton;
     EditText userNameText;
     EditText userPasswordText;
+    DBHelper DBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +31,12 @@ public class login extends AppCompatActivity {
         registerButton = findViewById(R.id.registerButton);
         userNameText = findViewById(R.id.editTextTextUserName);
         userPasswordText = findViewById(R.id.editTextTextPassword);
+        DBHelper = new DBHelper(login.this);
 
         //Actions taken when login button is pressed
         loginButton.setOnClickListener(new View.OnClickListener() {
+            InventoryUser newUser;
+
             @Override
             public void onClick(View view) {
                 //check to see if user entered a name and password
@@ -41,17 +45,20 @@ public class login extends AppCompatActivity {
                     Toast.makeText(login.this, "Username and/or password fields blank.",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    InventoryUser newUser = new InventoryUser(-1, userNameText.getText().toString(),
+                    newUser = new InventoryUser(-1, userNameText.getText().toString(),
                             userPasswordText.getText().toString());
                     //TODO: add function to check DB
                     //TODO: add function to go to inventory activity if user and password in DB
-                    Toast.makeText(login.this, newUser.toString(), Toast.LENGTH_SHORT).show();
+
+
                 }
             }
         });
 
         //Actions taken when register button is pressed
         registerButton.setOnClickListener(new View.OnClickListener() {
+            InventoryUser newUser;
+
             @Override
             public void onClick(View view) {
                 //check to see if user entered a name and password
@@ -60,11 +67,15 @@ public class login extends AppCompatActivity {
                     Toast.makeText(login.this, "Username and/or password fields blank.",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    InventoryUser newUser = new InventoryUser(-1, userNameText.getText().toString(),
+                    newUser = new InventoryUser(-1, userNameText.getText().toString(),
                             userPasswordText.getText().toString());
                     //TODO: add function to check DB if user already exists
-                    //TODO: add function to add username and password to DB
-                    Toast.makeText(login.this, newUser.toString(), Toast.LENGTH_SHORT).show();
+                    boolean addSuccess = DBHelper.addUser(newUser);
+                    if (addSuccess) {
+                        Toast.makeText(login.this, "User added.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(login.this, "Failed to add user.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
