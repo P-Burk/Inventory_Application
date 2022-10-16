@@ -10,10 +10,15 @@ import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String COLUMN_ID = "ID";
     public static final String USER_TABLE = "USER_TABLE";
+    public static final String COLUMN_USER_ID = "ID";
     public static final String COLUMN_USER_NAME = "USER_NAME";
     public static final String COLUMN_USER_PASSWORD = "USER_PASSWORD";
+    public static final String INVENTORY_TABLE = "INVENTORY_TABLE";
+    public static final String COLUMN_ITEM_ID = "ID";
+    public static final String COLUMN_ITEM_NAME = "ITEM_NAME";
+    public static final String COLUMN_ITEM_COUNT = "ITEM_COUNT";
+
 
     //CONSTRUCTOR
     public DBHelper(@Nullable Context context) {
@@ -22,9 +27,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createUserTableString = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " + COLUMN_USER_PASSWORD + " TEXT)";
-
+        String createUserTableString = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " + COLUMN_USER_PASSWORD + " TEXT)";
+        String createInvTableString = "CREATE TABLE " + INVENTORY_TABLE + " (" + COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ITEM_NAME + " TEXT, " + COLUMN_ITEM_COUNT + " INTEGER)";
         sqLiteDatabase.execSQL(createUserTableString);
+        sqLiteDatabase.execSQL(createInvTableString);
     }
 
     @Override
