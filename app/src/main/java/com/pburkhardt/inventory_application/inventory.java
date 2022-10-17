@@ -10,17 +10,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class inventory extends AppCompatActivity {
 
-    List<inventoryItemModel> inventoryItemsList = new ArrayList<>();
+    List<inventoryItemModel> inventoryItemsList;
     DBHelper DBHelper;
+    private RecyclerView inventoryRecyclerView;
+    private RecyclerViewAdapter invRecViewAdapter;
+    private RecyclerView.LayoutManager invLayoutManager;
 
 
     @Override
@@ -30,10 +33,7 @@ public class inventory extends AppCompatActivity {
         Toolbar inventoryToolBar = (Toolbar) findViewById(R.id.inventoryToolBar);
         setSupportActionBar(inventoryToolBar);
         DBHelper = new DBHelper(inventory.this);
-        RecyclerView recyclerView = findViewById(R.id.inventoryList);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, DBHelper.getAllItemsInInventory());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        buildRecyclerView();
     }
 
     @Override
@@ -75,4 +75,34 @@ public class inventory extends AppCompatActivity {
         Intent intent = new Intent(this, AddItemActivity.class);
         startActivity(intent);
     }
+
+    public void buildRecyclerView() {
+        inventoryItemsList = DBHelper.getAllItemsInInventory();
+        inventoryRecyclerView = findViewById(R.id.inventoryList);
+        invRecViewAdapter = new RecyclerViewAdapter(this, inventoryItemsList);
+        invLayoutManager = new LinearLayoutManager(this);
+
+        inventoryRecyclerView.setHasFixedSize(true);
+        inventoryRecyclerView.setAdapter(invRecViewAdapter);
+        inventoryRecyclerView.setLayoutManager(invLayoutManager);
+
+        invRecViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int itemPos) {
+                //do nothing
+            }
+
+            @Override
+            public void deleteItem(int itemPos) {
+                String itemName = inventoryItemsList.get(itemPos).getItemName();
+                if (DBHelper.deleteInvItem(itemName)) {
+                    Toast.makeText(inventory.this, "Item deleted.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                inventoryItemsList.remove(itemPos);
+                invRecViewAdapter.notifyItemRemoved(itemPos);
+            }
+        });
+    }
+
 }
