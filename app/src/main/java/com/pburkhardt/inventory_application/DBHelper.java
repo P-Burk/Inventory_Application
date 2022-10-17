@@ -122,4 +122,13 @@ public class DBHelper extends SQLiteOpenHelper {
         invAppDB.close();
         return inventoryList;
     }
+
+    public boolean deleteInvItem(String itemName) {
+        SQLiteDatabase invAppDB = this.getWritableDatabase();
+        int deleteSuccess = invAppDB.delete(INVENTORY_TABLE, COLUMN_ITEM_NAME + "=?", new String[] {itemName});
+        if (deleteSuccess > 0) {
+            return true;
+        }
+        return false;
+    }
 }
