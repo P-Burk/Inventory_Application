@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,27 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.viewHolder> {
     Context context;    //used for inflater
     List<inventoryItemModel> itemInventoryList;
+    private onItemClickListener itemListener;
+    private onFocusChangeListener focusListener;
+
+    public interface onItemClickListener {
+        void onItemClick(int itemPos);
+        void deleteItem(int itemPos);
+        void incrementItemCount(int itemPos);
+        void decrementItemCount(int itemPos);
+    }
+
+    public interface onFocusChangeListener {
+        void itemCountFocusUpdate(int itemPos, int newCount);
+    }
+
+    public void setOnItemClickListener(onItemClickListener listener) {
+        itemListener = listener;
+    }
+
+    public void setOnFocusChangeListener(onFocusChangeListener listener) {
+        focusListener = listener;
+    }
 
     ///// CONSTRUCTOR /////
     public RecyclerViewAdapter(Context context, List<inventoryItemModel> invItemList) {
@@ -29,7 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.inventory_row, parent, false);
 
-        return new RecyclerViewAdapter.viewHolder(view);
+        return new RecyclerViewAdapter.viewHolder(view, itemListener, focusListener);
     }
 
     @Override
@@ -49,17 +72,84 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         TextView itemName;
         ImageView subButton;
-        TextView itemCount;
+        EditText itemCount;
         ImageView addButton;
         ImageView trashButton;
 
-        public viewHolder(@NonNull View itemView) {
+        public viewHolder(@NonNull View itemView, onItemClickListener listener, onFocusChangeListener fListener) {
             super(itemView);
             itemName = itemView.findViewById(R.id.itemText);
             subButton = itemView.findViewById(R.id.subtractButton);
             itemCount = itemView.findViewById(R.id.itemCount);
             addButton = itemView.findViewById(R.id.additionButton);
             trashButton = itemView.findViewById(R.id.deleteItemButton);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int itemPos = getAdapterPosition();
+                        if (itemPos != RecyclerView.NO_POSITION) {
+                            itemCount.clearFocus();
+                            listener.onItemClick(itemPos);
+                        }
+                    }
+                }
+            });
+
+            trashButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int itemPos = getAdapterPosition();
+                        if (itemPos != RecyclerView.NO_POSITION) {
+                            itemCount.clearFocus();
+                            listener.deleteItem(itemPos);
+                        }
+                    }
+                }
+            });
+
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int itemPos = getAdapterPosition();
+                        if (itemPos != RecyclerView.NO_POSITION) {
+                            itemCount.clearFocus();
+                            listener.incrementItemCount(itemPos);
+                        }
+                    }
+                }
+            });
+
+            subButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int itemPos = getAdapterPosition();
+                        if (itemPos != RecyclerView.NO_POSITION) {
+                            itemCount.clearFocus();
+                            listener.decrementItemCount(itemPos);
+                        }
+                    }
+                }
+            });
+
+            itemCount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (!b && fListener != null) {
+                        int itemPos = getAdapterPosition();
+                        if (itemPos != RecyclerView.NO_POSITION) {
+                            fListener.itemCountFocusUpdate(itemPos, Integer.parseInt(itemCount.getText().toString()));
+                            itemCount.clearFocus();
+                        }
+
+                    }
+                }
+            });
+
         }
     }
 }
