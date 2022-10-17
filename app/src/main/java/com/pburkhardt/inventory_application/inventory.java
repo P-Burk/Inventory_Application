@@ -5,11 +5,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -76,6 +79,14 @@ public class inventory extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void hideKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        View focusView = inventory.this.getCurrentFocus();
+        if (focusView != null) {
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
     public void buildRecyclerView() {
         inventoryItemsList = DBHelper.getAllItemsInInventory();
         inventoryRecyclerView = findViewById(R.id.inventoryList);
@@ -89,7 +100,7 @@ public class inventory extends AppCompatActivity {
         invRecViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.onItemClickListener() {
             @Override
             public void onItemClick(int itemPos) {
-                //do nothing
+                hideKeyboard(inventory.this);
             }
 
             @Override
@@ -101,6 +112,35 @@ public class inventory extends AppCompatActivity {
                 }
                 inventoryItemsList.remove(itemPos);
                 invRecViewAdapter.notifyItemRemoved(itemPos);
+            }
+
+            @Override
+            public void incrementItemCount(int itemPos) {
+                inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
+                updateItem.setItemCount(updateItem.getItemCount() + 1);
+                DBHelper.updateItemCount(updateItem);
+                invRecViewAdapter.notifyItemChanged(itemPos);
+                hideKeyboard(inventory.this);
+            }
+
+            @Override
+            public void decrementItemCount(int itemPos) {
+                inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
+                updateItem.setItemCount(updateItem.getItemCount() - 1);
+                DBHelper.updateItemCount(updateItem);
+                invRecViewAdapter.notifyItemChanged(itemPos);
+                hideKeyboard(inventory.this);
+            }
+        });
+
+        invRecViewAdapter.setOnFocusChangeListener(new RecyclerViewAdapter.onFocusChangeListener() {
+            @Override
+            public void itemCountFocusUpdate(int itemPos, int newCount) {
+                inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
+                hideKeyboard(inventory.this);
+                updateItem.setItemCount(newCount);
+                DBHelper.updateItemCount(updateItem);
+                invRecViewAdapter.notifyItemChanged(itemPos);
             }
         });
     }
