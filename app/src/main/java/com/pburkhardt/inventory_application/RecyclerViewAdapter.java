@@ -15,6 +15,16 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.viewHolder> {
     Context context;    //used for inflater
     List<inventoryItemModel> itemInventoryList;
+    private onItemClickListener itemListener;
+
+    public interface onItemClickListener {
+        void onItemClick(int itemPos);
+        void deleteItem(int itemPos);
+    }
+
+    public void setOnItemClickListener(onItemClickListener listener) {
+        itemListener = listener;
+    }
 
     ///// CONSTRUCTOR /////
     public RecyclerViewAdapter(Context context, List<inventoryItemModel> invItemList) {
@@ -29,7 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.inventory_row, parent, false);
 
-        return new RecyclerViewAdapter.viewHolder(view);
+        return new RecyclerViewAdapter.viewHolder(view, itemListener);
     }
 
     @Override
@@ -53,13 +63,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView addButton;
         ImageView trashButton;
 
-        public viewHolder(@NonNull View itemView) {
+        public viewHolder(@NonNull View itemView, onItemClickListener listener) {
             super(itemView);
             itemName = itemView.findViewById(R.id.itemText);
             subButton = itemView.findViewById(R.id.subtractButton);
             itemCount = itemView.findViewById(R.id.itemCount);
             addButton = itemView.findViewById(R.id.additionButton);
             trashButton = itemView.findViewById(R.id.deleteItemButton);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int itemPos = getAdapterPosition();
+                        if (itemPos != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemPos);
+                        }
+                    }
+                }
+            });
+
+            trashButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int itemPos = getAdapterPosition();
+                        if (itemPos != RecyclerView.NO_POSITION) {
+                            listener.deleteItem(itemPos);
+                        }
+                    }
+                }
+            });
+
         }
     }
 }
