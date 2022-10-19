@@ -19,6 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USER_NAME = "USER_NAME";
     public static final String COLUMN_USER_PASSWORD = "USER_PASSWORD";
     public static final String COLUMN_USER_PHONE_NUM = "USER_PHONE_NUM";
+    public static final String COLUMN_USER_SMS_FLAG = "USER_SMS_FLAG";
     public static final String INVENTORY_TABLE = "INVENTORY_TABLE";
     public static final String COLUMN_ITEM_ID = "ID";
     public static final String COLUMN_ITEM_NAME = "ITEM_NAME";
@@ -32,8 +33,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createUserTableString = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " + COLUMN_USER_PASSWORD + " TEXT, " + COLUMN_USER_PHONE_NUM + " INTEGER)";
-        String createInvTableString = "CREATE TABLE " + INVENTORY_TABLE + " (" + COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ITEM_NAME + " TEXT, " + COLUMN_ITEM_COUNT + " INTEGER)";
+        String createUserTableString = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_USER_ID +
+                " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " +
+                COLUMN_USER_PASSWORD + " TEXT, " + COLUMN_USER_PHONE_NUM + " INTEGER, " +
+                COLUMN_USER_SMS_FLAG + " INTEGER)";
+        String createInvTableString = "CREATE TABLE " + INVENTORY_TABLE + " (" + COLUMN_ITEM_ID +
+                " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ITEM_NAME + " TEXT, " +
+                COLUMN_ITEM_COUNT + " INTEGER)";
         sqLiteDatabase.execSQL(createUserTableString);
         sqLiteDatabase.execSQL(createInvTableString);
     }
@@ -154,5 +160,26 @@ public class DBHelper extends SQLiteOpenHelper {
         invAppDB.update(USER_TABLE, contentValues, COLUMN_USER_NAME + "=?",
                 new String[] {userName});
         invAppDB.close();
+    }
+
+    public void updateUserSMSflag(String userName, int newFlag) {
+        SQLiteDatabase invAppDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_USER_SMS_FLAG, newFlag);
+        invAppDB.update(USER_TABLE, contentValues, COLUMN_USER_NAME + "=?",
+                new String[] {userName});
+        invAppDB.close();
+    }
+
+    public boolean getUserSMSflag(String userName) {
+        SQLiteDatabase invAppDB = this.getReadableDatabase();
+        String DBquery = String.format("SELECT " + COLUMN_USER_SMS_FLAG + " FROM %s WHERE %s='%s'", USER_TABLE,
+                COLUMN_USER_NAME, userName);
+
+        Cursor cursor = invAppDB.rawQuery(DBquery, null);
+        int data = cursor.getInt(4);
+        cursor.close();
+        invAppDB.close();
+        return data == 1;
     }
 }
