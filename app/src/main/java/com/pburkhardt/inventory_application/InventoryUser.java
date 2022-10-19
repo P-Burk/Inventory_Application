@@ -8,13 +8,15 @@ public class InventoryUser {
     private String invUserName;
     private String invUserPassword;
     private int userPhoneNum;
+    private boolean smsFlag;
 
     //CONSTRUCTORS
-    public InventoryUser(int invUserID, String invUserName, String invUserPassword) {
+    public InventoryUser(int invUserID, String invUserName, String invUserPassword, int phoneNum, boolean smsFlag) {
         this.invUserID = invUserID;
         this.invUserName = invUserName;
         this.invUserPassword = invUserPassword;
         this.userPhoneNum = 0;
+        this.smsFlag = false;
     }
 
     public InventoryUser() {
@@ -52,15 +54,13 @@ public class InventoryUser {
         return invUserPassword;
     }
 
-    public void setInvUserPassword(String invUserPassword) {
-        this.invUserPassword = invUserPassword;
-    }
+    public void setInvUserPassword(String invUserPassword) {this.invUserPassword = invUserPassword;}
 
-    public int getUserPhoneNum() {
-        return userPhoneNum;
-    }
+    public int getUserPhoneNum() {return userPhoneNum;}
 
-    public void setUserPhoneNum(int userPhoneNum) {
-        this.userPhoneNum = userPhoneNum;
-    }
+    public void setUserPhoneNum(int userPhoneNum) {this.userPhoneNum = userPhoneNum;}
+
+    public boolean isSmsFlag() {return smsFlag;}
+
+    public void setSmsFlag(boolean smsFlag) {this.smsFlag = smsFlag;}
 }

@@ -44,7 +44,7 @@ public class login extends AppCompatActivity {
                 } else {
                     //create user object
                     newUser = new InventoryUser(-1, userNameText.getText().toString(),
-                            userPasswordText.getText().toString());
+                            userPasswordText.getText().toString(), 0, false);
 
                     //check to see if user is in the DB
                     if (DBHelper.checkDBforUser(newUser, true)) {     //user found -> login
@@ -73,7 +73,7 @@ public class login extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 } else {
                     newUser = new InventoryUser(-1, userNameText.getText().toString(),
-                            userPasswordText.getText().toString());
+                            userPasswordText.getText().toString(), 0, false);
 
                     //check to see if username is already in DB
                     if (DBHelper.checkDBforUser(newUser, false)) {
