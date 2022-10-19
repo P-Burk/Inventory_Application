@@ -1,5 +1,9 @@
 package com.pburkhardt.inventory_application;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +13,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +27,29 @@ import java.util.List;
 
 public class inventory extends AppCompatActivity {
 
+    String CURRENT_USER;
     List<inventoryItemModel> inventoryItemsList;
     DBHelper DBHelper;
     private RecyclerView inventoryRecyclerView;
     private RecyclerViewAdapter invRecViewAdapter;
     private RecyclerView.LayoutManager invLayoutManager;
+
+    //creates function so that settings activity can be launched and return CURRENT_USER for continuity
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == 111) {
+                        Intent intent = result.getData();
+                        if (intent != null) {
+                            CURRENT_USER = intent.getStringExtra("CURRENT_USER");
+                            Log.d("result name", CURRENT_USER);
+                        }
+                    }
+                }
+            }
+    );
 
 
     @Override
@@ -66,7 +89,8 @@ public class inventory extends AppCompatActivity {
 
     public void goToSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        intent.putExtra("CURRENT_USER", CURRENT_USER);
+        activityResultLauncher.launch(intent);
     }
 
     //place holder action

@@ -1,12 +1,10 @@
 package com.pburkhardt.inventory_application;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NavUtils;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
@@ -14,27 +12,36 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Objects;
 
-//import android.widget.Toolbar;
-
 public class SettingsActivity extends AppCompatActivity {
 
     private int SMS_PERMISSIONS_CODE = 1;
+    String CURRENT_USER;
     SwitchCompat SMSpermSwitch;
     private EditText phoneNumFieldText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DBHelper DBHelper = new DBHelper(SettingsActivity.this);
         setContentView(R.layout.activity_settings);
+        CURRENT_USER = getIntent().getStringExtra("CURRENT_USER");
+        phoneNumFieldText = findViewById(R.id.editTextPhoneNum);
 
         Toolbar toolbar = findViewById(R.id.settingsToolBar);
         toolbar.setTitle("Settings");
@@ -126,5 +133,21 @@ public class SettingsActivity extends AppCompatActivity {
     // check to see what the permission is set to
     private boolean checkSMSperms() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    //needed to use the back button at the top and still keep the CURRENT_USER
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent();
+                intent.putExtra("CURRENT_USER", CURRENT_USER);
+                setResult(111, intent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
