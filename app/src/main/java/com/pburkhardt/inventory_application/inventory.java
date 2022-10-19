@@ -173,9 +173,6 @@ public class inventory extends AppCompatActivity {
             public void itemCountFocusUpdate(int itemPos, int newCount) {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
                 hideKeyboard(inventory.this);
-                if (newCount < 0) {
-                    newCount = 0;
-                }
                 if (newCount == 0) {
                     //TODO: send SMS
                 }
