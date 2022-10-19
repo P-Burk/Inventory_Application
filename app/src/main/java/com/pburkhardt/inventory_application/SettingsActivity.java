@@ -51,13 +51,15 @@ public class SettingsActivity extends AppCompatActivity {
 
         // set the switch and its state based off of the SMS permission state
         SMSpermSwitch = (SwitchCompat) findViewById(R.id.SMS_permSwitch);
-        SMSpermSwitch.setChecked(checkSMSperms());
+        SMSpermSwitch.setChecked(DBHelper.getUserSMSflag(CURRENT_USER));
         SMSpermSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checkedStatus) {
                 if (checkedStatus) {
+                    DBHelper.updateUserSMSflag(CURRENT_USER, 1);
                     requestSMSperms();
                 } else {
+                    DBHelper.updateUserSMSflag(CURRENT_USER, 0);
                     Toast.makeText(getApplicationContext(), "SMS permissions denied", Toast.LENGTH_SHORT).show();
                 }
             }
