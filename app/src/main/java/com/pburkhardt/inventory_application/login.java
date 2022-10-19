@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 public class login extends AppCompatActivity {
 
+    String CURRENT_USER;
+
     //Controls for the activity
     Button loginButton;
     Button registerButton;
@@ -48,6 +50,7 @@ public class login extends AppCompatActivity {
                     if (DBHelper.checkDBforUser(newUser, true)) {     //user found -> login
                         Toast.makeText(login.this, "Login Successful.",
                                 Toast.LENGTH_SHORT).show();
+                        CURRENT_USER = userNameText.getText().toString();
                         goToInventory(view);
                     } else {                                    //user not found -> error
                         Toast.makeText(login.this, "Login Failed.",
@@ -90,6 +93,7 @@ public class login extends AppCompatActivity {
 
     public void goToInventory(View view) {
         Intent intent = new Intent(this, inventory.class);
+        intent.putExtra("CURRENT_USER", CURRENT_USER);
         startActivity(intent);
     }
 }
