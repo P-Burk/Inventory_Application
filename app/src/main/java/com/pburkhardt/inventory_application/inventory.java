@@ -36,6 +36,9 @@ public class inventory extends AppCompatActivity {
         Toolbar inventoryToolBar = (Toolbar) findViewById(R.id.inventoryToolBar);
         setSupportActionBar(inventoryToolBar);
         DBHelper = new DBHelper(inventory.this);
+        if (CURRENT_USER == null) {
+            CURRENT_USER = getIntent().getStringExtra("CURRENT_USER");
+        }
         buildRecyclerView();
     }
 
@@ -76,6 +79,7 @@ public class inventory extends AppCompatActivity {
 
     public void goToAddActivity(View view) {
         Intent intent = new Intent(this, AddItemActivity.class);
+        intent.putExtra("CURRENT_USER", CURRENT_USER);
         startActivity(intent);
     }
 
