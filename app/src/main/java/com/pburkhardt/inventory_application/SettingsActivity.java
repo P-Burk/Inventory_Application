@@ -29,6 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private int SMS_PERMISSIONS_CODE = 1;
     SwitchCompat SMSpermSwitch;
+    private EditText phoneNumFieldText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,25 @@ public class SettingsActivity extends AppCompatActivity {
                     requestSMSperms();
                 } else {
                     Toast.makeText(getApplicationContext(), "SMS permissions denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        phoneNumFieldText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if ((i & EditorInfo.IME_MASK_ACTION) != 0) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(phoneNumFieldText.getWindowToken(), 0);
+                    Log.d("Settings username: ", CURRENT_USER);
+                    Log.d("Settings Phone num: ", phoneNumFieldText.getText().toString());
+                    DBHelper.updateUserPhoneNum(CURRENT_USER, Long.parseLong(phoneNumFieldText.getText().toString()));
+
+                    phoneNumFieldText.setFocusable(false);
+                    phoneNumFieldText.setFocusableInTouchMode(true);
+                    return true;
+                } else {
+                    return false;
                 }
             }
         });

@@ -7,12 +7,14 @@ public class InventoryUser {
     private int invUserID;
     private String invUserName;
     private String invUserPassword;
+    private int userPhoneNum;
 
     //CONSTRUCTORS
     public InventoryUser(int invUserID, String invUserName, String invUserPassword) {
         this.invUserID = invUserID;
         this.invUserName = invUserName;
         this.invUserPassword = invUserPassword;
+        this.userPhoneNum = 0;
     }
 
     public InventoryUser() {
@@ -52,5 +54,13 @@ public class InventoryUser {
 
     public void setInvUserPassword(String invUserPassword) {
         this.invUserPassword = invUserPassword;
+    }
+
+    public int getUserPhoneNum() {
+        return userPhoneNum;
+    }
+
+    public void setUserPhoneNum(int userPhoneNum) {
+        this.userPhoneNum = userPhoneNum;
     }
 }

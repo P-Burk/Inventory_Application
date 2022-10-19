@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -17,6 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_USER_ID = "ID";
     public static final String COLUMN_USER_NAME = "USER_NAME";
     public static final String COLUMN_USER_PASSWORD = "USER_PASSWORD";
+    public static final String COLUMN_USER_PHONE_NUM = "USER_PHONE_NUM";
     public static final String INVENTORY_TABLE = "INVENTORY_TABLE";
     public static final String COLUMN_ITEM_ID = "ID";
     public static final String COLUMN_ITEM_NAME = "ITEM_NAME";
@@ -30,7 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createUserTableString = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " + COLUMN_USER_PASSWORD + " TEXT)";
+        String createUserTableString = "CREATE TABLE " + USER_TABLE + " (" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_USER_NAME + " TEXT, " + COLUMN_USER_PASSWORD + " TEXT, " + COLUMN_USER_PHONE_NUM + " INTEGER)";
         String createInvTableString = "CREATE TABLE " + INVENTORY_TABLE + " (" + COLUMN_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_ITEM_NAME + " TEXT, " + COLUMN_ITEM_COUNT + " INTEGER)";
         sqLiteDatabase.execSQL(createUserTableString);
         sqLiteDatabase.execSQL(createInvTableString);
@@ -139,5 +141,18 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ITEM_COUNT, updateItem.getItemCount());
         invAppDB.update(INVENTORY_TABLE, contentValues, COLUMN_ITEM_NAME + "=?",
                 new String[] {updateItem.getItemName()});
+        invAppDB.close();
+    }
+
+    //update a users phone number in the database
+    public void updateUserPhoneNum(String userName, Long userPhone) {
+        SQLiteDatabase invAppDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        Log.d("username: ", userName);
+        Log.d("Phone num: ", String.valueOf(userPhone));
+        contentValues.put(COLUMN_USER_PHONE_NUM, userPhone);
+        invAppDB.update(USER_TABLE, contentValues, COLUMN_USER_NAME + "=?",
+                new String[] {userName});
+        invAppDB.close();
     }
 }
