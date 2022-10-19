@@ -155,6 +155,13 @@ public class inventory extends AppCompatActivity {
             public void decrementItemCount(int itemPos) {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
                 updateItem.setItemCount(updateItem.getItemCount() - 1);
+                if (updateItem.getItemCount() == 0) {
+                    //TODO: send message
+                }
+                if (updateItem.getItemCount() < 0) {
+                    updateItem.setItemCount(0);
+                }
+
                 DBHelper.updateItemCount(updateItem);
                 invRecViewAdapter.notifyItemChanged(itemPos);
                 hideKeyboard(inventory.this);
@@ -166,6 +173,12 @@ public class inventory extends AppCompatActivity {
             public void itemCountFocusUpdate(int itemPos, int newCount) {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
                 hideKeyboard(inventory.this);
+                if (newCount < 0) {
+                    newCount = 0;
+                }
+                if (newCount == 0) {
+                    //TODO: send SMS
+                }
                 updateItem.setItemCount(newCount);
                 DBHelper.updateItemCount(updateItem);
                 invRecViewAdapter.notifyItemChanged(itemPos);
