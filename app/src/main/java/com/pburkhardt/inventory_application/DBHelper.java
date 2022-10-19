@@ -56,6 +56,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         contentValues.put(COLUMN_USER_NAME, newUser.getInvUserName());
         contentValues.put(COLUMN_USER_PASSWORD, newUser.getInvUserPassword());
+        contentValues.put(COLUMN_USER_PHONE_NUM, newUser.getUserPhoneNum());
+        contentValues.put(COLUMN_USER_SMS_FLAG, newUser.isSmsFlag());
 
         long insert = invAppDB.insert(USER_TABLE, null, contentValues);
         return insert != -1;  //true
@@ -177,7 +179,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_USER_NAME, userName);
 
         Cursor cursor = invAppDB.rawQuery(DBquery, null);
-        int data = cursor.getInt(4);
+        cursor.moveToFirst();
+        int data = cursor.getInt(0);
         cursor.close();
         invAppDB.close();
         return data == 1;
