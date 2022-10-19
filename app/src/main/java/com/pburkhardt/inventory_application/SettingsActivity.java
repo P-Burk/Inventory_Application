@@ -71,7 +71,11 @@ public class SettingsActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(phoneNumFieldText.getWindowToken(), 0);
                     Log.d("Settings username: ", CURRENT_USER);
                     Log.d("Settings Phone num: ", phoneNumFieldText.getText().toString());
-                    DBHelper.updateUserPhoneNum(CURRENT_USER, Long.parseLong(phoneNumFieldText.getText().toString()));
+                    try {
+                        DBHelper.updateUserPhoneNum(CURRENT_USER, Long.parseLong(phoneNumFieldText.getText().toString()));
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "That's not a phone number.", Toast.LENGTH_SHORT).show();
+                    }
 
                     phoneNumFieldText.setFocusable(false);
                     phoneNumFieldText.setFocusableInTouchMode(true);
