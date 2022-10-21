@@ -164,6 +164,19 @@ public class DBHelper extends SQLiteOpenHelper {
         invAppDB.close();
     }
 
+    public Long getUserPhoneNum(String userName) {
+        SQLiteDatabase invAppDB = this.getReadableDatabase();
+        String DBquery = String.format("SELECT " + COLUMN_USER_PHONE_NUM + " FROM %s WHERE %s='%s'", USER_TABLE,
+                COLUMN_USER_NAME, userName);
+
+        Cursor cursor = invAppDB.rawQuery(DBquery, null);
+        cursor.moveToFirst();
+        Long phoneNum = cursor.getLong(0);
+        cursor.close();
+        invAppDB.close();
+        return phoneNum;
+    }
+
     public void updateUserSMSflag(String userName, int newFlag) {
         SQLiteDatabase invAppDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
