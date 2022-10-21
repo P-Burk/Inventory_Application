@@ -42,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         CURRENT_USER = getIntent().getStringExtra("CURRENT_USER");
         phoneNumFieldText = findViewById(R.id.editTextPhoneNum);
+        phoneNumFieldText.setHint(DBHelper.getUserPhoneNum(CURRENT_USER).toString());
 
         Toolbar toolbar = findViewById(R.id.settingsToolBar);
         toolbar.setTitle("Settings");
