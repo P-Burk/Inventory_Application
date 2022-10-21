@@ -66,6 +66,7 @@ public class inventory extends AppCompatActivity {
         buildRecyclerView();
     }
 
+    //used for the search and settings buttons in the tool bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -82,12 +83,14 @@ public class inventory extends AppCompatActivity {
         }
     }
 
+    //creates the options menu for the toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.inventory_menu, menu);
         return true;
     }
 
+    //navigate to settings activity
     public void goToSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         intent.putExtra("CURRENT_USER", CURRENT_USER);
@@ -102,12 +105,15 @@ public class inventory extends AppCompatActivity {
         someActionSnack.show();
     }
 
+    //navigate to add item activity
     public void goToAddActivity(View view) {
         Intent intent = new Intent(this, AddItemActivity.class);
         intent.putExtra("CURRENT_USER", CURRENT_USER);
         startActivity(intent);
     }
 
+    //hide the keyboard after focus change
+    //used when a user manually updates item count via tapping on the editText field
     public void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         View focusView = inventory.this.getCurrentFocus();
@@ -116,6 +122,7 @@ public class inventory extends AppCompatActivity {
         }
     }
 
+    //builds recyclerView for inventory cards
     public void buildRecyclerView() {
         inventoryItemsList = DBHelper.getAllItemsInInventory();
         inventoryRecyclerView = findViewById(R.id.inventoryList);
@@ -126,12 +133,14 @@ public class inventory extends AppCompatActivity {
         inventoryRecyclerView.setAdapter(invRecViewAdapter);
         inventoryRecyclerView.setLayoutManager(invLayoutManager);
 
+        //sets listener for card button/field user interactions
         invRecViewAdapter.setOnItemClickListener(new RecyclerViewAdapter.onItemClickListener() {
             @Override
             public void onItemClick(int itemPos) {
                 hideKeyboard(inventory.this);
             }
 
+            //trash/delete button
             @Override
             public void deleteItem(int itemPos) {
                 String itemName = inventoryItemsList.get(itemPos).getItemName();
@@ -143,6 +152,7 @@ public class inventory extends AppCompatActivity {
                 invRecViewAdapter.notifyItemRemoved(itemPos);
             }
 
+            // + count increment button
             @Override
             public void incrementItemCount(int itemPos) {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
@@ -152,6 +162,7 @@ public class inventory extends AppCompatActivity {
                 hideKeyboard(inventory.this);
             }
 
+            // - count decrement button
             @Override
             public void decrementItemCount(int itemPos) {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
@@ -169,6 +180,7 @@ public class inventory extends AppCompatActivity {
             }
         });
 
+        //listener for updating the counts of items via the editText field
         invRecViewAdapter.setOnFocusChangeListener(new RecyclerViewAdapter.onFocusChangeListener() {
             @Override
             public void itemCountFocusUpdate(int itemPos, int newCount) {
@@ -184,6 +196,7 @@ public class inventory extends AppCompatActivity {
         });
     }
 
+    //sends user an SMS message
     private void sendSMS(inventoryItemModel item) {
         SmsManager smsManager = SmsManager.getDefault();
         Long phoneNum = DBHelper.getUserPhoneNum(CURRENT_USER);

@@ -93,6 +93,7 @@ public class login extends AppCompatActivity {
         });
     }
 
+    //navigate to inventory activity
     public void goToInventory(View view) {
         Intent intent = new Intent(this, inventory.class);
         intent.putExtra("CURRENT_USER", CURRENT_USER);

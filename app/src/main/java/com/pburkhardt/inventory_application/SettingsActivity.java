@@ -44,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
         phoneNumFieldText = findViewById(R.id.editTextPhoneNum);
         phoneNumFieldText.setHint(DBHelper.getUserPhoneNum(CURRENT_USER).toString());
 
+        //toolbar setup
         Toolbar toolbar = findViewById(R.id.settingsToolBar);
         toolbar.setTitle("Settings");
         toolbar.setTitleTextColor(Color.WHITE);
@@ -66,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        //set listener to detect changes in phone number editText field
         phoneNumFieldText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

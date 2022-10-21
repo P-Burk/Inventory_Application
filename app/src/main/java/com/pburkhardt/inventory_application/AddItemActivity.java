@@ -34,6 +34,7 @@ public class AddItemActivity extends AppCompatActivity {
         addButton = findViewById(R.id.addItemButton);
         DBHelper = new DBHelper(AddItemActivity.this);
 
+        //listener for the add button
         addButton.setOnClickListener(view -> {
             inventoryItemModel newItem = new inventoryItemModel(itemNameText.getText().toString(),
                     Integer.parseInt(itemCountText.getText().toString()));
@@ -51,6 +52,7 @@ public class AddItemActivity extends AppCompatActivity {
         });
     }
 
+    //navigates to the Add Item activity
     public void goToInventoryActivity(View view) {
         Intent intent = new Intent(this, inventory.class);
         intent.putExtra("CURRENT_USER", CURRENT_USER);
