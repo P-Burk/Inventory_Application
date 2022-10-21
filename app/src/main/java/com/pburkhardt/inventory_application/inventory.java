@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,7 +55,7 @@ public class inventory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
-        Toolbar inventoryToolBar = (Toolbar) findViewById(R.id.inventoryToolBar);
+        Toolbar inventoryToolBar = findViewById(R.id.inventoryToolBar);
         setSupportActionBar(inventoryToolBar);
         DBHelper = new DBHelper(inventory.this);
         if (CURRENT_USER == null) {
@@ -180,18 +179,15 @@ public class inventory extends AppCompatActivity {
         });
 
         //listener for updating the counts of items via the editText field
-        invRecViewAdapter.setOnFocusChangeListener(new RecyclerViewAdapter.onFocusChangeListener() {
-            @Override
-            public void itemCountFocusUpdate(int itemPos, int newCount) {
-                inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
-                hideKeyboard(inventory.this);
-                updateItem.setItemCount(newCount);
-                if (newCount == 0) {
-                    sendSMS(updateItem);
-                }
-                DBHelper.updateItemCount(updateItem);
-                invRecViewAdapter.notifyItemChanged(itemPos);
+        invRecViewAdapter.setOnFocusChangeListener((itemPos, newCount) -> {
+            inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
+            hideKeyboard(inventory.this);
+            updateItem.setItemCount(newCount);
+            if (newCount == 0) {
+                sendSMS(updateItem);
             }
+            DBHelper.updateItemCount(updateItem);
+            invRecViewAdapter.notifyItemChanged(itemPos);
         });
     }
 
