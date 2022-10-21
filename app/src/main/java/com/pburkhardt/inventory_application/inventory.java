@@ -197,8 +197,9 @@ public class inventory extends AppCompatActivity {
         Long phoneNum = DBHelper.getUserPhoneNum(CURRENT_USER);
         String smsMessage = item.getItemName() + "'s stock has been depleted to " + item.getItemCount() +
                 ". Consider replenishing stock.";
-
-        smsManager.sendTextMessage(Long.toString(phoneNum), null, smsMessage, null, null);
+        if (DBHelper.getUserSMSflag(CURRENT_USER)) {
+            smsManager.sendTextMessage(Long.toString(phoneNum), null, smsMessage, null, null);
+        }
     }
 
 }
