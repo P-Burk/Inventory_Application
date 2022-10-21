@@ -157,8 +157,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateUserPhoneNum(String userName, Long userPhone) {
         SQLiteDatabase invAppDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        Log.d("username: ", userName);
-        Log.d("Phone num: ", String.valueOf(userPhone));
         contentValues.put(COLUMN_USER_PHONE_NUM, userPhone);
         invAppDB.update(USER_TABLE, contentValues, COLUMN_USER_NAME + "=?",
                 new String[] {userName});

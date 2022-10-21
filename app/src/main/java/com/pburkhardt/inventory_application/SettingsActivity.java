@@ -74,8 +74,6 @@ public class SettingsActivity extends AppCompatActivity {
                 if ((i & EditorInfo.IME_MASK_ACTION) != 0) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(phoneNumFieldText.getWindowToken(), 0);
-                    Log.d("Settings username: ", CURRENT_USER);
-                    Log.d("Settings Phone num: ", phoneNumFieldText.getText().toString());
                     try {
                         DBHelper.updateUserPhoneNum(CURRENT_USER, Long.parseLong(phoneNumFieldText.getText().toString()));
                     } catch (Exception e) {

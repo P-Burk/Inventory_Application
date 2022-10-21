@@ -45,7 +45,6 @@ public class inventory extends AppCompatActivity {
                         Intent intent = result.getData();
                         if (intent != null) {
                             CURRENT_USER = intent.getStringExtra("CURRENT_USER");
-                            Log.d("result name", CURRENT_USER);
                         }
                     }
                 }
