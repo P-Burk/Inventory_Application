@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -84,69 +83,61 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             addButton = itemView.findViewById(R.id.additionButton);
             trashButton = itemView.findViewById(R.id.deleteItemButton);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int itemPos = getAdapterPosition();
-                        if (itemPos != RecyclerView.NO_POSITION) {
-                            itemCount.clearFocus();
-                            listener.onItemClick(itemPos);
-                        }
+            // LISTENERS FOR USER/CARD INTERACTIONS //
+
+            //clicking on a card
+            itemView.setOnClickListener(view -> {
+                if (listener != null) {
+                    int itemPos = getAdapterPosition();
+                    if (itemPos != RecyclerView.NO_POSITION) {
+                        itemCount.clearFocus();
+                        listener.onItemClick(itemPos);
                     }
                 }
             });
 
-            trashButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int itemPos = getAdapterPosition();
-                        if (itemPos != RecyclerView.NO_POSITION) {
-                            itemCount.clearFocus();
-                            listener.deleteItem(itemPos);
-                        }
+            //trash/delete button
+            trashButton.setOnClickListener(view -> {
+                if (listener != null) {
+                    int itemPos = getAdapterPosition();
+                    if (itemPos != RecyclerView.NO_POSITION) {
+                        itemCount.clearFocus();
+                        listener.deleteItem(itemPos);
                     }
                 }
             });
 
-            addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int itemPos = getAdapterPosition();
-                        if (itemPos != RecyclerView.NO_POSITION) {
-                            itemCount.clearFocus();
-                            listener.incrementItemCount(itemPos);
-                        }
+            // + count increment button
+            addButton.setOnClickListener(view -> {
+                if (listener != null) {
+                    int itemPos = getAdapterPosition();
+                    if (itemPos != RecyclerView.NO_POSITION) {
+                        itemCount.clearFocus();
+                        listener.incrementItemCount(itemPos);
                     }
                 }
             });
 
-            subButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int itemPos = getAdapterPosition();
-                        if (itemPos != RecyclerView.NO_POSITION) {
-                            itemCount.clearFocus();
-                            listener.decrementItemCount(itemPos);
-                        }
+            // - count decrement button
+            subButton.setOnClickListener(view -> {
+                if (listener != null) {
+                    int itemPos = getAdapterPosition();
+                    if (itemPos != RecyclerView.NO_POSITION) {
+                        itemCount.clearFocus();
+                        listener.decrementItemCount(itemPos);
                     }
                 }
             });
 
-            itemCount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    if (!b && fListener != null) {
-                        int itemPos = getAdapterPosition();
-                        if (itemPos != RecyclerView.NO_POSITION) {
-                            fListener.itemCountFocusUpdate(itemPos, Integer.parseInt(itemCount.getText().toString()));
-                            itemCount.clearFocus();
-                        }
-
+            //updating the counts of items via the editText field
+            itemCount.setOnFocusChangeListener((view, b) -> {
+                if (!b && fListener != null) {
+                    int itemPos = getAdapterPosition();
+                    if (itemPos != RecyclerView.NO_POSITION) {
+                        fListener.itemCountFocusUpdate(itemPos, Integer.parseInt(itemCount.getText().toString()));
+                        itemCount.clearFocus();
                     }
+
                 }
             });
 

@@ -10,7 +10,7 @@ public class InventoryUser {
     private Long userPhoneNum;
     private boolean smsFlag;
 
-    //CONSTRUCTORS
+    ///// CONSTRUCTORS /////
     public InventoryUser(int invUserID, String invUserName, String invUserPassword, Long phoneNum, boolean smsFlag) {
         this.invUserID = invUserID;
         this.invUserName = invUserName;
@@ -33,7 +33,7 @@ public class InventoryUser {
                 '}';
     }
 
-    //SETTERS and GETTERS
+    ///// GETTERS + SETTERS /////
     public int getInvUserID() {
         return invUserID;
     }
