@@ -43,8 +43,9 @@ public class login extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 } else {
                     //create user object
+                    //hardcoded phone number for the emulated phone
                     newUser = new InventoryUser(-1, userNameText.getText().toString(),
-                            userPasswordText.getText().toString(), 0, false);
+                            userPasswordText.getText().toString(), 5555215554L, false);
 
                     //check to see if user is in the DB
                     if (DBHelper.checkDBforUser(newUser, true)) {     //user found -> login
@@ -72,8 +73,9 @@ public class login extends AppCompatActivity {
                     Toast.makeText(login.this, "Username and/or password fields blank.",
                             Toast.LENGTH_SHORT).show();
                 } else {
+                    //hardcoded phone number for the emulated phone
                     newUser = new InventoryUser(-1, userNameText.getText().toString(),
-                            userPasswordText.getText().toString(), 0, false);
+                            userPasswordText.getText().toString(), 5555215554L, false);
 
                     //check to see if username is already in DB
                     if (DBHelper.checkDBforUser(newUser, false)) {
