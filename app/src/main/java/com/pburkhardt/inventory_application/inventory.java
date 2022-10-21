@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -156,7 +157,7 @@ public class inventory extends AppCompatActivity {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
                 updateItem.setItemCount(updateItem.getItemCount() - 1);
                 if (updateItem.getItemCount() == 0) {
-                    //TODO: send message
+                    sendSMS(updateItem);
                 }
                 if (updateItem.getItemCount() < 0) {
                     updateItem.setItemCount(0);
@@ -173,14 +174,23 @@ public class inventory extends AppCompatActivity {
             public void itemCountFocusUpdate(int itemPos, int newCount) {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
                 hideKeyboard(inventory.this);
-                if (newCount == 0) {
-                    //TODO: send SMS
-                }
                 updateItem.setItemCount(newCount);
+                if (newCount == 0) {
+                    sendSMS(updateItem);
+                }
                 DBHelper.updateItemCount(updateItem);
                 invRecViewAdapter.notifyItemChanged(itemPos);
             }
         });
+    }
+
+    private void sendSMS(inventoryItemModel item) {
+        SmsManager smsManager = SmsManager.getDefault();
+        Long phoneNum = DBHelper.getUserPhoneNum(CURRENT_USER);
+        String smsMessage = item.getItemName() + "'s stock has been depleted to " + item.getItemCount() +
+                ". Consider replenishing stock.";
+
+        smsManager.sendTextMessage(Long.toString(phoneNum), null, smsMessage, null, null);
     }
 
 }
