@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 public class login extends AppCompatActivity {
 
+    String CURRENT_USER;
+
     //Controls for the activity
     Button loginButton;
     Button registerButton;
@@ -41,13 +43,15 @@ public class login extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 } else {
                     //create user object
+                    //hardcoded phone number for the emulated phone
                     newUser = new InventoryUser(-1, userNameText.getText().toString(),
-                            userPasswordText.getText().toString());
+                            userPasswordText.getText().toString(), 5555215554L, false);
 
                     //check to see if user is in the DB
                     if (DBHelper.checkDBforUser(newUser, true)) {     //user found -> login
                         Toast.makeText(login.this, "Login Successful.",
                                 Toast.LENGTH_SHORT).show();
+                        CURRENT_USER = userNameText.getText().toString();
                         goToInventory(view);
                     } else {                                    //user not found -> error
                         Toast.makeText(login.this, "Login Failed.",
@@ -69,8 +73,9 @@ public class login extends AppCompatActivity {
                     Toast.makeText(login.this, "Username and/or password fields blank.",
                             Toast.LENGTH_SHORT).show();
                 } else {
+                    //hardcoded phone number for the emulated phone
                     newUser = new InventoryUser(-1, userNameText.getText().toString(),
-                            userPasswordText.getText().toString());
+                            userPasswordText.getText().toString(), 5555215554L, false);
 
                     //check to see if username is already in DB
                     if (DBHelper.checkDBforUser(newUser, false)) {
@@ -90,6 +95,7 @@ public class login extends AppCompatActivity {
 
     public void goToInventory(View view) {
         Intent intent = new Intent(this, inventory.class);
+        intent.putExtra("CURRENT_USER", CURRENT_USER);
         startActivity(intent);
     }
 }

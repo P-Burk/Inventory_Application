@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class AddItemActivity extends AppCompatActivity {
+
+    String CURRENT_USER;
     Button addButton;
     EditText itemNameText, itemCountText;
     DBHelper DBHelper;
@@ -20,6 +22,7 @@ public class AddItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+        CURRENT_USER = getIntent().getStringExtra("CURRENT_USER");
 
         Toolbar toolbar = findViewById(R.id.materialToolbar);
         toolbar.setTitle("Add Item");
@@ -50,6 +53,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     public void goToInventoryActivity(View view) {
         Intent intent = new Intent(this, inventory.class);
+        intent.putExtra("CURRENT_USER", CURRENT_USER);
         startActivity(intent);
     }
 }

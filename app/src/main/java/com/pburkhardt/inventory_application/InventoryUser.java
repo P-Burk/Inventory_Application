@@ -7,12 +7,16 @@ public class InventoryUser {
     private int invUserID;
     private String invUserName;
     private String invUserPassword;
+    private Long userPhoneNum;
+    private boolean smsFlag;
 
     //CONSTRUCTORS
-    public InventoryUser(int invUserID, String invUserName, String invUserPassword) {
+    public InventoryUser(int invUserID, String invUserName, String invUserPassword, Long phoneNum, boolean smsFlag) {
         this.invUserID = invUserID;
         this.invUserName = invUserName;
         this.invUserPassword = invUserPassword;
+        this.userPhoneNum = phoneNum;
+        this.smsFlag = false;
     }
 
     public InventoryUser() {
@@ -50,7 +54,13 @@ public class InventoryUser {
         return invUserPassword;
     }
 
-    public void setInvUserPassword(String invUserPassword) {
-        this.invUserPassword = invUserPassword;
-    }
+    public void setInvUserPassword(String invUserPassword) {this.invUserPassword = invUserPassword;}
+
+    public Long getUserPhoneNum() {return userPhoneNum;}
+
+    public void setUserPhoneNum(Long userPhoneNum) {this.userPhoneNum = userPhoneNum;}
+
+    public boolean isSmsFlag() {return smsFlag;}
+
+    public void setSmsFlag(boolean smsFlag) {this.smsFlag = smsFlag;}
 }

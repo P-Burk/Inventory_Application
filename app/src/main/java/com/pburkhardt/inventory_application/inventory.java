@@ -1,5 +1,9 @@
 package com.pburkhardt.inventory_application;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +13,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +28,29 @@ import java.util.List;
 
 public class inventory extends AppCompatActivity {
 
+    String CURRENT_USER;
     List<inventoryItemModel> inventoryItemsList;
     DBHelper DBHelper;
     private RecyclerView inventoryRecyclerView;
     private RecyclerViewAdapter invRecViewAdapter;
     private RecyclerView.LayoutManager invLayoutManager;
+
+    //creates function so that settings activity can be launched and return CURRENT_USER for continuity
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == 111) {
+                        Intent intent = result.getData();
+                        if (intent != null) {
+                            CURRENT_USER = intent.getStringExtra("CURRENT_USER");
+                            Log.d("result name", CURRENT_USER);
+                        }
+                    }
+                }
+            }
+    );
 
 
     @Override
@@ -36,6 +60,9 @@ public class inventory extends AppCompatActivity {
         Toolbar inventoryToolBar = (Toolbar) findViewById(R.id.inventoryToolBar);
         setSupportActionBar(inventoryToolBar);
         DBHelper = new DBHelper(inventory.this);
+        if (CURRENT_USER == null) {
+            CURRENT_USER = getIntent().getStringExtra("CURRENT_USER");
+        }
         buildRecyclerView();
     }
 
@@ -63,7 +90,8 @@ public class inventory extends AppCompatActivity {
 
     public void goToSettings(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        intent.putExtra("CURRENT_USER", CURRENT_USER);
+        activityResultLauncher.launch(intent);
     }
 
     //place holder action
@@ -76,6 +104,7 @@ public class inventory extends AppCompatActivity {
 
     public void goToAddActivity(View view) {
         Intent intent = new Intent(this, AddItemActivity.class);
+        intent.putExtra("CURRENT_USER", CURRENT_USER);
         startActivity(intent);
     }
 
@@ -127,6 +156,13 @@ public class inventory extends AppCompatActivity {
             public void decrementItemCount(int itemPos) {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
                 updateItem.setItemCount(updateItem.getItemCount() - 1);
+                if (updateItem.getItemCount() == 0) {
+                    sendSMS(updateItem);
+                }
+                if (updateItem.getItemCount() < 0) {
+                    updateItem.setItemCount(0);
+                }
+
                 DBHelper.updateItemCount(updateItem);
                 invRecViewAdapter.notifyItemChanged(itemPos);
                 hideKeyboard(inventory.this);
@@ -139,10 +175,22 @@ public class inventory extends AppCompatActivity {
                 inventoryItemModel updateItem = inventoryItemsList.get(itemPos);
                 hideKeyboard(inventory.this);
                 updateItem.setItemCount(newCount);
+                if (newCount == 0) {
+                    sendSMS(updateItem);
+                }
                 DBHelper.updateItemCount(updateItem);
                 invRecViewAdapter.notifyItemChanged(itemPos);
             }
         });
+    }
+
+    private void sendSMS(inventoryItemModel item) {
+        SmsManager smsManager = SmsManager.getDefault();
+        Long phoneNum = DBHelper.getUserPhoneNum(CURRENT_USER);
+        String smsMessage = item.getItemName() + "'s stock has been depleted to " + item.getItemCount() +
+                ". Consider replenishing stock.";
+
+        smsManager.sendTextMessage(Long.toString(phoneNum), null, smsMessage, null, null);
     }
 
 }
