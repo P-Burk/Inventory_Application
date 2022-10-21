@@ -11,19 +11,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -52,40 +47,34 @@ public class SettingsActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // set the switch and its state based off of the SMS permission state
-        SMSpermSwitch = (SwitchCompat) findViewById(R.id.SMS_permSwitch);
+        SMSpermSwitch = findViewById(R.id.SMS_permSwitch);
         SMSpermSwitch.setChecked(DBHelper.getUserSMSflag(CURRENT_USER));
-        SMSpermSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checkedStatus) {
-                if (checkedStatus) {
-                    DBHelper.updateUserSMSflag(CURRENT_USER, 1);
-                    requestSMSperms();
-                } else {
-                    DBHelper.updateUserSMSflag(CURRENT_USER, 0);
-                    Toast.makeText(getApplicationContext(), "SMS permissions denied", Toast.LENGTH_SHORT).show();
-                }
+        SMSpermSwitch.setOnCheckedChangeListener((compoundButton, checkedStatus) -> {
+            if (checkedStatus) {
+                DBHelper.updateUserSMSflag(CURRENT_USER, 1);
+                requestSMSperms();
+            } else {
+                DBHelper.updateUserSMSflag(CURRENT_USER, 0);
+                Toast.makeText(getApplicationContext(), "SMS permissions denied", Toast.LENGTH_SHORT).show();
             }
         });
 
         //set listener to detect changes in phone number editText field
-        phoneNumFieldText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if ((i & EditorInfo.IME_MASK_ACTION) != 0) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(phoneNumFieldText.getWindowToken(), 0);
-                    try {
-                        DBHelper.updateUserPhoneNum(CURRENT_USER, Long.parseLong(phoneNumFieldText.getText().toString()));
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "That's not a phone number.", Toast.LENGTH_SHORT).show();
-                    }
-
-                    phoneNumFieldText.setFocusable(false);
-                    phoneNumFieldText.setFocusableInTouchMode(true);
-                    return true;
-                } else {
-                    return false;
+        phoneNumFieldText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if ((i & EditorInfo.IME_MASK_ACTION) != 0) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(phoneNumFieldText.getWindowToken(), 0);
+                try {
+                    DBHelper.updateUserPhoneNum(CURRENT_USER, Long.parseLong(phoneNumFieldText.getText().toString()));
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "That's not a phone number.", Toast.LENGTH_SHORT).show();
                 }
+
+                phoneNumFieldText.setFocusable(false);
+                phoneNumFieldText.setFocusableInTouchMode(true);
+                return true;
+            } else {
+                return false;
             }
         });
     }
@@ -97,20 +86,12 @@ public class SettingsActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("SMS Send Permission")
                     .setMessage("Needed in order to send low inventory SMS messages.")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            ActivityCompat.requestPermissions(SettingsActivity.this,
-                                    new String[] {Manifest.permission.SEND_SMS},
-                                    SMS_PERMISSIONS_CODE);
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                            SMSpermSwitch.setChecked(false);
-                        }
+                    .setPositiveButton("Ok", (dialogInterface, i) -> ActivityCompat.requestPermissions(SettingsActivity.this,
+                            new String[] {Manifest.permission.SEND_SMS},
+                            SMS_PERMISSIONS_CODE))
+                    .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                        SMSpermSwitch.setChecked(false);
                     })
                     .create().show();
 
