@@ -1,5 +1,7 @@
 # Inventory Application
 
+## [Video of final project](https://youtu.be/NwPMxdK-VPY)
+
 ## • Briefly summarize the requirements and goals of the app you developed. What user needs was this app designed to address?
 The requirements for this app are that it meets the needs of a user trying to keep track of their inventory. This requires the app to allow a user to login to their inventory, add items to the inventory, remove items from the inventory, and alter the counts of items in the inventory. My goal was to satisfy all these needs via the use of a simple and easy to use interface that other inventory tracking apps were lacking.
 ## • What screens and features were necessary to support user needs and produce a user-centered UI for the app? How did your UI designs keep users in mind? Why were your designs successful?
